@@ -7,17 +7,18 @@ const newG = require('./globby').newIOServer;
 
 app.use('/static', express.static('public'))
 
+let squareHealth = 1;
 newG({
-    map:[[{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5}],
-         [{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5}],
-         [{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5}],
-         [{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5}],
-         [{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5}],
-         [{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5}],
-         [{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5}],
-         [{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5}],
-         [{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5}],
-         [{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5}]],
+    map:[[{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}],
+         [{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}],
+         [{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}],
+         [{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}],
+         [{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}],
+         [{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}],
+         [{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}],
+         [{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}],
+         [{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}],
+         [{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth},{health:squareHealth}]],
         playersArray:[
           {player:'player1', position:{x:0,y:0},death:false},
           {player:'player2', position:{x:5,y:5},death:false},
@@ -25,10 +26,11 @@ newG({
           {player:'player4', position:{x:3,y:3},death:false},
           {player:'player5', position:{x:9,y:9},death:false},
         ],
-        breakTimer:20
+        breakTimer:5
 },
 function(player,move,state){
   let pl = state.playersArray.find((pl) => {
+      console.log(pl)
     return pl.player == player.ref;
   });
   let playersArray = state.playersArray
@@ -94,29 +96,36 @@ function(player,move,state){
         break;
 
   }
-  if(state.map[pl.position.x]){
-    if(state.map[pl.position.x][pl.position.y]){
-      if(state.map[pl.position.x][pl.position.y].health <=0){
-        pl.death = true;
-      }
-    }
-  }
 
-  console.log(pl.position.y)
+
     //State Change on Move
 },
 5, // Number Of Players
 function(state){
     //State Change on Time
+    state.playersArray.forEach((pl) => {
+      if(state.map[pl.position.x]){
+        if(state.map[pl.position.x][pl.position.y]){
+          if(state.map[pl.position.x][pl.position.y].health <=0){
+            pl.death = true;
+          }
+        }
+      }
+    })
     if(state.breakTimer < 0) {
-      state.breakTimer = 20;
+      state.breakTimer = 5;
       const row = state.map[Math.floor(Math.random()*state.map.length)];
       const col = row[Math.floor(Math.random()*row.length)]
-
       if(col.health > 0){
         col.health -=1;
       }
     }
+    else{
+      state.breakTimer -=1;
+    }
+
+
+
 },
 io
 )
