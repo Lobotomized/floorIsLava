@@ -20,11 +20,11 @@ newG({
          [{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5}],
          [{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5}]],
     players:[
-      {player:'player1', position:{x:0,y:0}},
-      {player:'player2', position:{x:5,y:5}},
-      {player:'player3', position:{x:7,y:7}},
-      {player:'player4', position:{x:3,y:3}},
-      {player:'player5', position:{x:9,y:9}},
+      {player:'player1', position:{x:0,y:0},death:false},
+      {player:'player2', position:{x:5,y:5},death:false},
+      {player:'player3', position:{x:7,y:7},death:false},
+      {player:'player4', position:{x:3,y:3},death:false},
+      {player:'player5', position:{x:9,y:9},death:false},
     ],
     breakTimer= 20
 },
@@ -93,6 +93,10 @@ function(player,move,state){
           if(freePosCheck){
             pl.position.y -=1;
           }
+        }
+
+        if(state.map[pl.position.x][pl.position.y].health <=0){
+          pl.death = true;
         }
   }
     //State Change on Move
