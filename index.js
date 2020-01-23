@@ -30,7 +30,6 @@ newG({
 },
 function(player,move,state){
   let pl = state.playersArray.find((pl) => {
-      console.log(pl)
     return pl.player == player.ref;
   });
   let playersArray = state.playersArray

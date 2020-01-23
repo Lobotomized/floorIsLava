@@ -63,15 +63,23 @@ const newGame = function(baseState,moveFunction,maxPlayers=2,timeFunction){
                 let player = state.players.find((pl) => {
                     return pl.id == playerId
                 })
+
+                if(state.players.length < maxPlayers){
+                    return {message:"Not Enough Players to start"}
+                }
+
                 moveFunction(player, move,state)
                 return this.returnState();
             }
 
             this.timeFunction = () => {
+                if(state.players.length < maxPlayers){
+                    return {message:"Not Enough Players to start"}
+                }
                 if(timeFunction != undefined){
                     timeFunction(state)
                 }
-               
+
                 return this.returnState();
             }
   
@@ -92,7 +100,7 @@ const newGame = function(baseState,moveFunction,maxPlayers=2,timeFunction){
                 }
             }
             this.disconnect = (playerId) => {
-  
+                
             }
         }
   
