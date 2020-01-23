@@ -8,11 +8,28 @@ let socket = io();
 
 socket.on('returnState', (state) => {
                 //Draw the game
-                console.log(state)
+                console.log(state);
             }) // Return State
 
 socket.emit('move',{type:'moveX',speed:-50}) // Send Move
 
+document.addEventListener('keydown',(ev) => {
+    console.log(ev.key)
+    switch(ev.key){
+        case 'ArrowRight':
+            socket.emit('move','right')
+            break;
+        case 'ArrowLeft':
+            socket.emit('move','left')
+            break;
+        case 'ArrowUp':
+        socket.emit('move','up')
+            break;   
+        case 'ArrowDown':
+        socket.emit('move','down')
+            break;             
+    }
+})
 
 </script>
 

@@ -28,13 +28,13 @@ newG({
         breakTimer:20
 },
 function(player,move,state){
-  let pl;
+  let pl = state.playersArray.find((pl) => {
+    return pl.player == player.ref;
+  });
+  let playersArray = state.playersArray
+
   switch(move){
     case 'left': 
-      pl = playersArray.find((pl) => {
-        pl.player == player;
-      })
-
       if(pl.position.x > 0){
         let freePosCheck = true;
         playersArray.forEach((innerPl) => {
@@ -46,10 +46,9 @@ function(player,move,state){
           pl.position.x -=1;
         }
       }
+      break;
     case 'right': 
-      pl = playersArray.find((pl) => {
-        pl.player == player;
-      })
+
 
       if(pl.position.x > 0){
         let freePosCheck = true;
@@ -62,10 +61,9 @@ function(player,move,state){
           pl.position.x +=1;
         }
       }
+      break;
     case 'down': 
-      pl = state.playersArray.find((pl) => {
-        pl.player == player;
-      })
+
 
       if(pl.position.y > 0){
         let freePosCheck = true;
@@ -78,10 +76,9 @@ function(player,move,state){
           pl.position.y +=1;
         }
       }
+      break;
       case 'up': 
-        pl = state.playersArray.find((pl) => {
-          pl.player == player;
-        })
+
 
         if(pl.position.y > 0){
           let freePosCheck = true;
@@ -94,11 +91,18 @@ function(player,move,state){
             pl.position.y -=1;
           }
         }
+        break;
 
-        if(state.map[pl.position.x][pl.position.y].health <=0){
-          pl.death = true;
-        }
   }
+  if(state.map[pl.position.x]){
+    if(state.map[pl.position.x][pl.position.y]){
+      if(state.map[pl.position.x][pl.position.y].health <=0){
+        pl.death = true;
+      }
+    }
+  }
+
+  console.log(pl.position.y)
     //State Change on Move
 },
 5, // Number Of Players
