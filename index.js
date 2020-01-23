@@ -4,7 +4,6 @@ const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 const newG = require('./globby').newIOServer;
 
-console.log(io)
 
 app.use('/static', express.static('public'))
 
@@ -19,25 +18,26 @@ newG({
          [{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5}],
          [{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5}],
          [{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5},{health:5}]],
-    players:[
-      {player:'player1', position:{x:0,y:0},death:false},
-      {player:'player2', position:{x:5,y:5},death:false},
-      {player:'player3', position:{x:7,y:7},death:false},
-      {player:'player4', position:{x:3,y:3},death:false},
-      {player:'player5', position:{x:9,y:9},death:false},
-    ],
-    breakTimer= 20
+        playersArray:[
+          {player:'player1', position:{x:0,y:0},death:false},
+          {player:'player2', position:{x:5,y:5},death:false},
+          {player:'player3', position:{x:7,y:7},death:false},
+          {player:'player4', position:{x:3,y:3},death:false},
+          {player:'player5', position:{x:9,y:9},death:false},
+        ],
+        breakTimer:20
 },
 function(player,move,state){
+  let pl;
   switch(move){
     case 'left': 
-      let pl = players.find((pl) => {
+      pl = playersArray.find((pl) => {
         pl.player == player;
       })
 
       if(pl.position.x > 0){
         let freePosCheck = true;
-        players.forEach((innerPl) => {
+        playersArray.forEach((innerPl) => {
           if(innerPl.position.x == pl.position.x-1 && innerPl.position.y == pl.position.y){
             freePosCheck = false;
           }
@@ -47,13 +47,13 @@ function(player,move,state){
         }
       }
     case 'right': 
-      let pl = players.find((pl) => {
+      pl = playersArray.find((pl) => {
         pl.player == player;
       })
 
       if(pl.position.x > 0){
         let freePosCheck = true;
-        players.forEach((innerPl) => {
+        state.playersArray.forEach((innerPl) => {
           if(innerPl.position.x == pl.position.x+1 && innerPl.position.y == pl.position.y){
             freePosCheck = false;
           }
@@ -63,13 +63,13 @@ function(player,move,state){
         }
       }
     case 'down': 
-      let pl = players.find((pl) => {
+      pl = state.playersArray.find((pl) => {
         pl.player == player;
       })
 
       if(pl.position.y > 0){
         let freePosCheck = true;
-        players.forEach((innerPl) => {
+        state.playersArray.forEach((innerPl) => {
           if(innerPl.position.y == pl.position.y+1 && innerPl.position.x == pl.position.x){
             freePosCheck = false;
           }
@@ -79,13 +79,13 @@ function(player,move,state){
         }
       }
       case 'up': 
-        let pl = players.find((pl) => {
+        pl = state.playersArray.find((pl) => {
           pl.player == player;
         })
 
         if(pl.position.y > 0){
           let freePosCheck = true;
-          players.forEach((innerPl) => {
+          state.playersArray.forEach((innerPl) => {
             if(innerPl.position.y == pl.position.y-1 && innerPl.position.x == pl.position.x){
               freePosCheck = false;
             }
@@ -101,11 +101,11 @@ function(player,move,state){
   }
     //State Change on Move
 },
-2, // Number Of Players
+5, // Number Of Players
 function(state){
     //State Change on Time
-    if(breakTimer < 0) {
-      breakTimer = 20;
+    if(state.breakTimer < 0) {
+      state.breakTimer = 20;
       const row = state.map[Math.floor(Math.random()*state.map.length)];
       const col = row[Math.floor(Math.random()*row.length)]
 

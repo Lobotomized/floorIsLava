@@ -64,20 +64,20 @@ const newGame = function(baseState,moveFunction,maxPlayers=2,timeFunction){
                     return pl.id == playerId
                 })
                 moveFunction(player, move,state)
-                return this.returnState(playerId);
+                return this.returnState();
             }
 
-            this.timeFunction = (playerId) => {
+            this.timeFunction = () => {
                 if(timeFunction != undefined){
-                    timeFunction(state,playerId)
+                    timeFunction(state)
                 }
                
                 return this.returnState();
             }
   
-            this.returnState = (playerId) => {
+            this.returnState = () => {
                 let copyState =  JSON.parse(JSON.stringify(state));
-                return {state:copyState,player:playerId}
+                return copyState
             }
   
             this.join = (playerId) => {
@@ -113,7 +113,7 @@ module.exports.newIOServer = function newServer(baseState,moveFunction,maxPlayer
 
                 lobby.games.forEach((game) => {
                     game.players.forEach((player) => {
-                        io.to(player.id).emit('returnState',game.timeFunction(player.id))
+                        io.to(player.id).emit('returnState',game.timeFunction())
                     })
                 })
                 helperFunctionDelay();
